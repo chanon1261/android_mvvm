@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
         viewModel.events.observe(this, androidx.lifecycle.Observer {
             adpater.loadData(it)
         })
+
+        viewModel.events2.observe(this, androidx.lifecycle.Observer {
+            adpater.add(it)
+        })
     }
 
     override fun onResume() {

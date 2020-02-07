@@ -15,16 +15,23 @@ class MainActivityViewModel(private val retrofit: ApiService) : ViewModel() {
     val events: LiveData<List<GithubEvents>>
         get() = _events
 
+    private val _events2 = MutableLiveData<List<GithubEvents>>()
+    val events2: LiveData<List<GithubEvents>>
+        get() = _events2
+
     val gitRepository = GitRepository()
 
     fun loadEvents() {
-
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = async { gitRepository.getEvent() }
+                val response2 = async { gitRepository.getEvent() }
                 withContext(Dispatchers.Main) {
                     if (response.await().isSuccessful) {
                         _events.postValue(response.await().body())
+                    }
+                    if (response2.await().isSuccessful) {
+                        _events2.postValue(response.await().body())
                     }
                 }
                 println("GithubEvents $response")
@@ -32,6 +39,5 @@ class MainActivityViewModel(private val retrofit: ApiService) : ViewModel() {
                 println("GithubEvents CoroutineScope Exception ${e.message}")
             }
         }
-
     }
 }

@@ -11,7 +11,7 @@ import com.panat.mvvm.retrofit.model.GithubEvents
 class GitEventsAdapter(private val context: Context) :
     RecyclerView.Adapter<GitEventsAdapter.EventsAapterViewHolder>() {
 
-    private var items: List<GithubEvents> = mutableListOf()
+    private var items: MutableList<GithubEvents> = mutableListOf()
 
     override fun getItemCount(): Int {
         return items.size
@@ -45,7 +45,11 @@ class GitEventsAdapter(private val context: Context) :
     }
 
     fun loadData(data: List<GithubEvents>) {
-        this.items = data
+        this.items = data as MutableList<GithubEvents>
         notifyDataSetChanged()
+    }
+
+    fun add(data: List<GithubEvents>) {
+        this.items.addAll(data)
     }
 }
