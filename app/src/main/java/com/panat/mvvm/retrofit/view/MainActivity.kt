@@ -1,7 +1,7 @@
 package com.panat.mvvm.retrofit.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.adapter.GitEventsAdapter
@@ -23,6 +23,11 @@ class MainActivity : AppCompatActivity() {
         viewModel.events.observe(this, androidx.lifecycle.Observer {
             adpater.loadData(it)
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadEvents()
     }
 }
 
