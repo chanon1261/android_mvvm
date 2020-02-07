@@ -15,26 +15,13 @@ class MainActivityViewModel(private val retrofit: ApiService) : ViewModel() {
     val events: LiveData<List<GithubEvents>>
         get() = _events
 
-    val git = GitRepository()
+    val gitRepository = GitRepository()
 
     fun loadEvents() {
-//        retrofit.getEvents().enqueue(object : Callback<List<GithubEvents>> {
-//            override fun onResponse(
-//                call: Call<List<GithubEvents>>,
-//                response: Response<List<GithubEvents>>
-//            ) {
-//                _events.postValue(response.body())
-//            }
-//
-//            override fun onFailure(call: Call<List<GithubEvents>>, t: Throwable) {
-//                println("GithubEvents onFailure")
-//            }
-//        })
-//        retrofit.getEvents().cancel()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = async { git.getEvent() }
+                val response = async { gitRepository.getEvent() }
                 withContext(Dispatchers.Main) {
                     if (response.await().isSuccessful) {
                         _events.postValue(response.await().body())
