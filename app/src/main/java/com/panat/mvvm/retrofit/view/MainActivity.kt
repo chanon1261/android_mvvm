@@ -15,17 +15,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val adpater = GitEventsAdapter(this)
+        val adapter = GitEventsAdapter(this)
         rvEvent.layoutManager = LinearLayoutManager(this)
-        rvEvent.adapter = adpater
+        rvEvent.adapter = adapter
 
         viewModel.loadEvents()
         viewModel.events.observe(this, androidx.lifecycle.Observer {
-            adpater.loadData(it)
+            adapter.loadData(it)
         })
 
         viewModel.events2.observe(this, androidx.lifecycle.Observer {
-            adpater.add(it)
+            adapter.add(it)
         })
     }
 

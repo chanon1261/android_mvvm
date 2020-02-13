@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MVVM</string>
+    <string name="send">send</string>
+    <string name="your_message">your message</string>
 </resources>
