@@ -4,6 +4,7 @@ import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterF
 import com.panat.mvvm.retrofit.BuildConfig
 import com.panat.mvvm.retrofit.service.ApiService
 import com.panat.mvvm.retrofit.viewModel.GitEventActivityViewModel
+import com.panat.mvvm.retrofit.viewModel.MainViewModel
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -12,14 +13,17 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val appModule = module {
-    viewModel { GitEventActivityViewModel( get() ) }
+
+    viewModel { GitEventActivityViewModel(get()) }
+    viewModel { MainViewModel( get() ) }
     factory { provideRetrofit() }
 }
 
 fun provideRetrofit(): ApiService {
 
     val interceptor = HttpLoggingInterceptor();
-    interceptor.level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+    interceptor.level =
+        if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
     val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
 
     return Retrofit.Builder()
