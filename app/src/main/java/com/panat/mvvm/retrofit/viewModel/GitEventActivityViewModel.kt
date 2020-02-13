@@ -9,7 +9,7 @@ import com.panat.mvvm.retrofit.service.GitRepository
 import kotlinx.coroutines.*
 
 
-class MainActivityViewModel(private val retrofit: ApiService) : ViewModel() {
+class GitEventActivityViewModel(private val retrofit: ApiService) : ViewModel() {
 
     private val _events = MutableLiveData<List<GithubEvents>>()
     val events: LiveData<List<GithubEvents>>

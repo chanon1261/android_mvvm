@@ -5,13 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.adapter.GitEventsAdapter
-import com.panat.mvvm.retrofit.viewModel.MainActivityViewModel
+import com.panat.mvvm.retrofit.viewModel.GitEventActivityViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
 
-class MainActivity : AppCompatActivity() {
+class GitEventActivity : AppCompatActivity() {
 
-    private val viewModel: MainActivityViewModel by inject()
+    private val viewModel: GitEventActivityViewModel by inject()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

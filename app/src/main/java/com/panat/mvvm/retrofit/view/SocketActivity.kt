@@ -60,6 +60,18 @@ class SocketActivity : AppCompatActivity() {
                 println("ack_data paper-news  ${args[0]}")
             }
         }
+
+        socket.on("paper-ack") { args ->
+            runOnUiThread {
+                println("ack_data paper-news  ${args[0]}")
+            }
+        }
+
+        socket.on("ping") { args ->
+            runOnUiThread {
+                println("ack_data ping  ${socket.id()} ")
+            }
+        }
     }
 
     private fun openSocket() {
