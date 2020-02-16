@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.panat.mvvm.retrofit.MainApp
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.databinding.ActivitySocketBinding
 import com.panat.mvvm.retrofit.service.AckWithTimeOut
@@ -13,15 +14,20 @@ import io.socket.emitter.Emitter
 import org.json.JSONException
 import org.json.JSONObject
 
+
+
+
 class SocketActivity : AppCompatActivity() {
 
 
     private lateinit var socket: Socket
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_socket)
         val binding =
             DataBindingUtil.setContentView<ActivitySocketBinding>(this, R.layout.activity_socket)
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = "Socket"
 
         openSocket()
         initSocket()
@@ -76,7 +82,7 @@ class SocketActivity : AppCompatActivity() {
 
     private fun openSocket() {
         try {
-            socket = IO.socket("http://10.168.55.101:8080/")
+            socket = IO.socket(MainApp.BaseUrl)
         } catch (e: Exception) {
             println(e.message)
             e.printStackTrace()
@@ -97,5 +103,10 @@ class SocketActivity : AppCompatActivity() {
 
     private var onConnectError = Emitter.Listener { args ->
         Log.e("onConnectError", "Exception " + args[0])
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }

@@ -7,8 +7,5 @@ import retrofit2.http.GET
 
 interface ApiService {
     @GET("events")
-    fun getEvents(): Call<List<GithubEvents>>
-
-    @GET("events")
     suspend fun getEventsCoroutines(): Response<List<GithubEvents>>
 }

@@ -15,4 +15,8 @@ class MainApp : Application() {
             modules(appModule)
         }
     }
+
+    companion object {
+        const val BaseUrl = "http://10.168.55.101:8080/"
+    }
 }
