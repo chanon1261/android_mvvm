@@ -1,4 +1,4 @@
-package com.panat.mvvm.retrofit.model
+package com.panat.mvvm.retrofit.model.UploadResponse
 
 data class ResponseUpload(
     val file: List<File>,

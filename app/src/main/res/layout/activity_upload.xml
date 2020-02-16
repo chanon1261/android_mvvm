@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.panat.mvvm.retrofit.viewModel.MainViewModel" />
+            type="com.panat.mvvm.retrofit.viewModel.UpLoadViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.panat.mvvm.retrofit.databinding.ItemEventsBinding
-import com.panat.mvvm.retrofit.model.GithubEvents
+import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
 
 class GitEventsAdapter(private val context: Context) :
-    RecyclerView.Adapter<GitEventsAdapter.EventsAapterViewHolder>() {
+    RecyclerView.Adapter<GitEventsAdapter.EventsAdapterViewHolder>() {
 
     private var items: MutableList<GithubEvents> = mutableListOf()
 
@@ -17,10 +17,10 @@ class GitEventsAdapter(private val context: Context) :
         return items.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsAapterViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventsAdapterViewHolder {
         val layoutInflator: LayoutInflater =
             context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        return EventsAapterViewHolder(
+        return EventsAdapterViewHolder(
             ItemEventsBinding.inflate(
                 layoutInflator,
                 parent,
@@ -29,10 +29,10 @@ class GitEventsAdapter(private val context: Context) :
         )
     }
 
-    override fun onBindViewHolder(holder: EventsAapterViewHolder, position: Int) =
+    override fun onBindViewHolder(holder: EventsAdapterViewHolder, position: Int) =
         holder.bind(items[position])
 
-    class EventsAapterViewHolder(private val binding: ItemEventsBinding) :
+    class EventsAdapterViewHolder(private val binding: ItemEventsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         private val context: Context = binding.root.context

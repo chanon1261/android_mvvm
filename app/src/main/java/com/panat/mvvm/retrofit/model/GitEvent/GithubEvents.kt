@@ -1,4 +1,4 @@
-package com.panat.mvvm.retrofit.model
+package com.panat.mvvm.retrofit.model.GitEvent
 
 data class GithubEvents(
     val actor: Actor,

@@ -2,7 +2,6 @@ package com.panat.mvvm.retrofit.view
 
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.panat.mvvm.retrofit.MainApp
 import com.panat.mvvm.retrofit.R
@@ -15,22 +14,13 @@ import org.json.JSONException
 import org.json.JSONObject
 
 
-
-
-class SocketActivity : AppCompatActivity() {
-
+class SocketActivity : BaseActivity() {
 
     private lateinit var socket: Socket
+    private lateinit var binding: ActivitySocketBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding =
-            DataBindingUtil.setContentView<ActivitySocketBinding>(this, R.layout.activity_socket)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = "Socket"
-
-        openSocket()
-        initSocket()
 
         binding.send.setOnClickListener {
             if (binding.message.text.toString().isNotEmpty()) {
@@ -78,6 +68,17 @@ class SocketActivity : AppCompatActivity() {
                 println("ack_data ping  ${socket.id()} ")
             }
         }
+    }
+
+    override fun setupView() {
+        super.setupView()
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_socket)
+        binding.lifecycleOwner = this
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        title = "Socket"
+        openSocket()
+        initSocket()
+
     }
 
     private fun openSocket() {

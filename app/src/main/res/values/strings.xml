@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MVVM</string>
+    <string name="app_name">Simple App</string>
     <string name="send">send</string>
     <string name="your_message">your message</string>
     <string name="git_event">Git Event</string>

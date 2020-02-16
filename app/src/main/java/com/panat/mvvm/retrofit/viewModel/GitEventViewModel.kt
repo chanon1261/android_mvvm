@@ -3,13 +3,12 @@ package com.panat.mvvm.retrofit.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.panat.mvvm.retrofit.model.GithubEvents
-import com.panat.mvvm.retrofit.service.ApiService
+import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
 import com.panat.mvvm.retrofit.Repository.GitRepository
 import kotlinx.coroutines.*
 
 
-class GitEventViewModel(private val retrofit: ApiService) : ViewModel() {
+class GitEventViewModel : ViewModel() {
 
     private val _events = MutableLiveData<List<GithubEvents>>()
     val events: LiveData<List<GithubEvents>>
@@ -26,7 +25,7 @@ class GitEventViewModel(private val retrofit: ApiService) : ViewModel() {
                         _events.postValue(response.await().body())
                     }
                 }
-                println("GithubEvents $response")
+                //println("GithubEvents ${response.await().body()}")
             } catch (e: Exception) {
                 println("GithubEvents CoroutineScope Exception ${e.message}")
             }

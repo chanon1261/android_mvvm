@@ -1,7 +1,6 @@
 package com.panat.mvvm.retrofit.service
 
-import com.panat.mvvm.retrofit.model.GithubEvents
-import retrofit2.Call
+import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
 import retrofit2.Response
 import retrofit2.http.GET
 
