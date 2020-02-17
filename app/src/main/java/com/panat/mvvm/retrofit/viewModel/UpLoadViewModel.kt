@@ -8,4 +8,8 @@ class UpLoadViewModel() : ViewModel() {
 
     val GALLERY_REQUEST_CODE = 101
 
+    fun uploadPicture(){
+
+    }
+
 }

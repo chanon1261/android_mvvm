@@ -6,7 +6,7 @@ import androidx.databinding.DataBindingUtil
 import com.panat.mvvm.retrofit.MainApp
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.databinding.ActivitySocketBinding
-import com.panat.mvvm.retrofit.service.AckWithTimeOut
+import com.panat.mvvm.retrofit.utils.AckWithTimeOut
 import io.socket.client.IO
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -49,6 +49,8 @@ class SocketActivity : BaseActivity() {
                 binding.message.setText("")
             }
         }
+        binding.message.setText("login")
+        binding.send.performClick()
 
 
         socket.on("paper-ack") { args ->
@@ -109,5 +111,11 @@ class SocketActivity : BaseActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return super.onSupportNavigateUp()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        socket.close()
+        socket.disconnect()
     }
 }

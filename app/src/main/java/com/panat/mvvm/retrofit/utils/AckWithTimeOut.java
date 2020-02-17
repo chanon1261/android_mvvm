@@ -1,10 +1,10 @@
-package com.panat.mvvm.retrofit.service;
+package com.panat.mvvm.retrofit.utils;
 
 import android.util.Log;
 
-
 import java.util.Timer;
 import java.util.TimerTask;
+
 import io.socket.client.Ack;
 
 public class AckWithTimeOut implements Ack {
@@ -23,16 +23,14 @@ public class AckWithTimeOut implements Ack {
         startTimer();
     }
 
-    private void startTimer()
-    {
-        Log.d("Thread start ",""+ Thread.currentThread());
+    private void startTimer() {
+        Log.d("Thread start ", "" + Thread.currentThread());
 
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
-            public void run()
-            {
-                Log.d("Thread",""+ Thread.currentThread());
+            public void run() {
+                Log.d("Thread", "" + Thread.currentThread());
                 callback("No Ack");
             }
         }, timeOut);

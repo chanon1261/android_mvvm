@@ -2,24 +2,36 @@ package com.panat.mvvm.retrofit.view
 
 import android.Manifest
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.webkit.MimeTypeMap
 import androidx.databinding.DataBindingUtil
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.JSONObjectRequestListener
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.panat.mvvm.retrofit.MainApp
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.databinding.ActivityUploadBinding
+import com.panat.mvvm.retrofit.di.getClient
 import com.panat.mvvm.retrofit.di.provideUpload
+import com.panat.mvvm.retrofit.service.UploadService
+import com.panat.mvvm.retrofit.utils.FileHelper
 import com.panat.mvvm.retrofit.viewModel.UpLoadViewModel
 import okhttp3.MediaType
-import okhttp3.MultipartBody
+import okhttp3.MultipartBody.Part.createFormData
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.jetbrains.anko.toast
+import org.json.JSONObject
 import org.koin.android.ext.android.inject
 import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 
@@ -29,12 +41,28 @@ class UploadActivity : BaseActivity() {
 
     private lateinit var binding: ActivityUploadBinding
     val viewModel: UpLoadViewModel by inject()
+    private lateinit var retrofit: UploadService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        retrofit = provideUpload()
+        setupView()
+
         binding.btnUploadImg.setOnClickListener {
             checkPermission()
         }
+
+        retrofit.test().enqueue(object : Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+
+            }
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                println("ok ${response.body()?.string()}")
+            }
+
+        })
+
     }
 
     override fun setupView() {
@@ -55,29 +83,58 @@ class UploadActivity : BaseActivity() {
 
     private fun upload(data: Intent) {
 
-        val uri = data.data
-        val retrofit = provideUpload()
+        val uri = data.data!!
 
-        val filePath = uri?.path!!
-        val file = File(filePath)
-        println("OkHttp  Filename " + file.name)
-        val mFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-        val fileToUpload = MultipartBody.Part.createFormData("file", file.name, mFile)
+        val fileHelper = FileHelper()
+        val realPath = fileHelper.getPathFromURI(this, uri)
+        val file = fileHelper.createFile(realPath!!)
 
-        retrofit.upload(fileToUpload).enqueue(object : retrofit2.Callback<ResponseBody> {
+//        uploadFromAndroidFastNetwork(file)
+        uploadFromRetrofit(uri)
+
+    }
+
+    private fun uploadFromRetrofit(uri: Uri) {
+
+        val fileHelper = FileHelper()
+        val realPath = fileHelper.getPathFromURI(this, uri)
+        val file = fileHelper.createFile(realPath!!)
+
+        val mediaType: MediaType = MediaType.parse(getMimeType(realPath))!!
+        val requestBody =  RequestBody.create(mediaType, file)
+        val filePart = createFormData("file", file.name, requestBody)
+
+        val call = retrofit.upload(filePart)
+
+        call.enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                toast("onFailure")
-                println("OkHttp : onFailure")
+                println("OkHttp onFailure ${t.message}")
             }
 
-            override fun onResponse(
-                call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-                toast("onResponse")
-                println("OkHttp : $response")
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                println("OkHttp onResponse")
             }
         })
+    }
+
+    private fun uploadFromAndroidFastNetwork(file: File) {
+
+        AndroidNetworking.upload(MainApp.BaseUrl + "dev/upload/photo/33")
+            .addMultipartFile("file", file)
+            .setTag(this)
+            .setOkHttpClient(null)
+            .setPriority(Priority.HIGH)
+            .build()
+            .getAsJSONObject(object : JSONObjectRequestListener {
+                override fun onResponse(response: JSONObject) {
+                    println("onResponse: $response")
+                }
+
+                override fun onError(anError: ANError) {
+                    println("onError: $anError")
+                    anError.printStackTrace()
+                }
+            })
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -115,5 +172,14 @@ class UploadActivity : BaseActivity() {
         val mimeTypes = arrayOf("image/jpeg", "image/png")
         intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
         startActivityForResult(intent, viewModel.GALLERY_REQUEST_CODE)
+    }
+
+    fun getMimeType(path: String): String {
+        var type = "image/jpeg" // Default Value
+        val extension = MimeTypeMap.getFileExtensionFromUrl(path);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension).toString()
+        }
+        return type
     }
 }

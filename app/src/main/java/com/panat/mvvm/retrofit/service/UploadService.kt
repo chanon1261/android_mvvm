@@ -1,6 +1,7 @@
 package com.panat.mvvm.retrofit.service
 
 import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Multipart
@@ -15,5 +16,14 @@ interface UploadService {
     fun upload(
         @Part file: MultipartBody.Part
     ): Call<ResponseBody>
+
+    @Multipart
+    @POST("dev/upload/photo/33")
+    fun upload2(
+        @Part("file") file: RequestBody
+    ): Call<ResponseBody>
+
+    @POST("/dev/test")
+    fun test(): Call<ResponseBody>
 
 }
