@@ -8,6 +8,5 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setupView()
     }
-
     open fun setupView() {}
 }

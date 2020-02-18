@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
-import com.panat.mvvm.retrofit.Repository.GitRepository
+import com.panat.mvvm.retrofit.repository.GitRepository
 import kotlinx.coroutines.*
 
 

@@ -1,4 +1,4 @@
-package com.panat.mvvm.retrofit.Repository
+package com.panat.mvvm.retrofit.repository
 
 import com.panat.mvvm.retrofit.di.provideGithubService
 
