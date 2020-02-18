@@ -10,7 +10,7 @@ import org.koin.dsl.module
 val appModule = module {
     viewModel { GitEventViewModel() }
     viewModel { MainViewModel(get()) }
-    viewModel { UpLoadViewModel() }
+    viewModel { UpLoadViewModel(get(), get()) }
     viewModel { SocketViewModel() }
 }
 
