@@ -13,43 +13,62 @@ import com.panat.mvvm.retrofit.utils.ProgressRequestBody
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 
 class UpLoadViewModel(val retrofit: UploadService, val context: Context) : ViewModel() {
-
 
     private val _success = MutableLiveData<ResponseBody>()
     val success: LiveData<ResponseBody>
         get() = _success
 
+    private val _process = MutableLiveData<Float>()
+    val process: LiveData<Float>
+        get() = _process
+
     fun uploadPicture(uri: Uri) {
         val fileHelper = FileHelper()
         val realPath = fileHelper.getPathFromURI(context, uri)
+
+        println("real path: $realPath")
         val file = fileHelper.createFile(realPath!!)
 
         val mediaType: MediaType = MediaType.parse(getMimeType(realPath))!!
-        val requestBody = RequestBody.create(mediaType, file)
-
 
         val fileProgress = ProgressRequestBody(file, mediaType)
-
-
         val filePart = MultipartBody.Part.createFormData("file", file.name, fileProgress)
-
 
         fileProgress.getProgressSubject()
             .subscribeOn(Schedulers.io())
             .subscribe { percentage ->
                 Log.i("PROGRESS", "$percentage%")
+                _process.postValue(percentage)
             }
+        upload(filePart)
+    }
 
+    fun uploadVideo(path: String) {
+        val file = File(path)
+        val mediaType: MediaType = MediaType.parse(getMimeType(path))!!
+        val fileProgress = ProgressRequestBody(file, mediaType)
+        val filePart = MultipartBody.Part.createFormData("file", file.name, fileProgress)
+        fileProgress.getProgressSubject()
+            .subscribeOn(Schedulers.io())
+            .subscribe { percentage ->
+                Log.i("PROGRESS", "$percentage%")
+                _process.postValue(percentage)
+            }
+        upload(filePart)
+
+
+    }
+
+    private fun upload(filePart: MultipartBody.Part) {
         val call = retrofit.upload(filePart)
-
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -61,8 +80,6 @@ class UpLoadViewModel(val retrofit: UploadService, val context: Context) : ViewM
                 _success.postValue(response.body())
             }
         })
-
-
     }
 
 

@@ -65,6 +65,9 @@ dependencies {
         exclude group: 'org.json', module: 'json'
     }
 
+    //Media Picker
+    implementation 'com.zhihu.android:matisse:0.5.3-beta3'
+
     //Dexter
     implementation 'com.karumi:dexter:6.0.2'
 

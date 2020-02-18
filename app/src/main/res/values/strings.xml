@@ -5,4 +5,5 @@
     <string name="git_event">Git Event</string>
     <string name="socket">socket</string>
     <string name="upload">upload</string>
+    <string name="image">image</string>
 </resources>

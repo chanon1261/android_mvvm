@@ -20,9 +20,14 @@ class ProgressRequestBody : RequestBody {
         this.mFile = mFile
         this.content = s
         ignoreFirstNumberOfWriteToCalls = 0
+        this.content =  s
     }
 
-    constructor(mFile: File, ignoreFirstNumberOfWriteToCalls: Int) : super() {
+    constructor(
+        mFile: File,
+        ignoreFirstNumberOfWriteToCalls: Int,
+        content: String
+    ) : super() {
         this.mFile = mFile
         this.ignoreFirstNumberOfWriteToCalls = ignoreFirstNumberOfWriteToCalls
     }

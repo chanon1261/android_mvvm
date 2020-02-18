@@ -80,7 +80,6 @@ class SocketActivity : BaseActivity() {
         title = "Socket"
         openSocket()
         initSocket()
-
     }
 
     private fun openSocket() {
@@ -90,7 +89,6 @@ class SocketActivity : BaseActivity() {
             println(e.message)
             e.printStackTrace()
         }
-
     }
 
     private fun initSocket() {

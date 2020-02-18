@@ -14,7 +14,7 @@ class GitEventViewModel : ViewModel() {
     val events: LiveData<List<GithubEvents>>
         get() = _events
 
-    val gitRepository = GitRepository()
+    private val gitRepository = GitRepository()
 
     fun start() {
         CoroutineScope(Dispatchers.IO).launch {
