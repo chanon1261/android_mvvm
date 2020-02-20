@@ -20,6 +20,7 @@ import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
+import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.databinding.ActivityUploadBinding
 import com.panat.mvvm.retrofit.di.provideUpload
 import com.panat.mvvm.retrofit.service.UploadService
@@ -32,12 +33,12 @@ import org.koin.android.ext.android.inject
 import java.io.File
 
 
-class UploadActivity() : BaseActivity() {
+class UploadActivity : BaseActivity() {
 
     private lateinit var binding: ActivityUploadBinding
     val viewModel: UpLoadViewModel by inject()
     private lateinit var retrofit: UploadService
-    val GALLERY_REQUEST_CODE = 101
+    private val GALLERY_REQUEST_CODE = 101
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,10 +63,8 @@ class UploadActivity() : BaseActivity() {
     }
 
     override fun setupView() {
-        binding =
-            DataBindingUtil.setContentView(this, com.panat.mvvm.retrofit.R.layout.activity_upload)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_upload)
         title = "Upload"
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.lifecycleOwner = this
     }
 
@@ -113,12 +112,6 @@ class UploadActivity() : BaseActivity() {
         //val bMap = ThumbnailUtils.createVideoThumbnail(file, Size(120, 120), signal)
         binding.image.setImageBitmap(b1Map)
         viewModel.uploadVideo(path)
-
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
     }
 
     private fun checkPermission() {
@@ -158,7 +151,7 @@ class UploadActivity() : BaseActivity() {
             .forResult(GALLERY_REQUEST_CODE)
     }
 
-    fun getRealPathFromURI(context: Context, contentUri: Uri): String {
+    private fun getRealPathFromURI(context: Context, contentUri: Uri): String {
         var cursor: Cursor? = null
         try {
             val proj = arrayOf(MediaStore.Video.Media.DATA)

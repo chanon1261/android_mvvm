@@ -2,6 +2,7 @@ package com.panat.mvvm.retrofit
 
 import android.app.Application
 import com.panat.mvvm.retrofit.di.NetworkModule
+import com.panat.mvvm.retrofit.di.SwitcherModule
 import com.panat.mvvm.retrofit.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -13,7 +14,7 @@ class MainApp : Application() {
         startKoin {
             androidLogger()
             androidContext(this@MainApp)
-            modules(listOf(appModule, NetworkModule))
+            modules(listOf(appModule, NetworkModule, SwitcherModule))
         }
     }
 

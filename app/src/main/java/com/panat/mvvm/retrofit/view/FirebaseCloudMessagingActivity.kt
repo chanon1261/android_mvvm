@@ -3,7 +3,6 @@ package com.panat.mvvm.retrofit.view
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -13,7 +12,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.panat.mvvm.retrofit.R
 import kotlinx.android.synthetic.main.activity_firebase_cloud_messaging.*
 
-class FirebaseCloudMessagingActivity : AppCompatActivity() {
+class FirebaseCloudMessagingActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +87,6 @@ class FirebaseCloudMessagingActivity : AppCompatActivity() {
     }
 
     companion object {
-
         private const val TAG = "FCM ACTIVITY"
     }
 

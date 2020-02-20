@@ -6,8 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.adapter.GitEventsAdapter
 import com.panat.mvvm.retrofit.databinding.ActivityGitEventBinding
+import com.panat.mvvm.retrofit.di.provideSwitcher
 import com.panat.mvvm.retrofit.viewModel.GitEventViewModel
 import kotlinx.android.synthetic.main.activity_git_event.*
+import kotlinx.android.synthetic.main.view_empty.*
+import kotlinx.android.synthetic.main.view_error.*
+import kotlinx.android.synthetic.main.view_progress.*
 import org.koin.android.ext.android.inject
 
 class GitEventActivity : BaseActivity() {
@@ -18,28 +22,25 @@ class GitEventActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_git_event)
+        binding.lifecycleOwner = this
+        title = "Git Event"
+        val switch = provideSwitcher(binding.rvEvent, emptyView, errorView, progressView, this)
 
         adapter = GitEventsAdapter(this)
         rvEvent.layoutManager = LinearLayoutManager(this)
         rvEvent.adapter = adapter
 
+        switch.showProgressView()
         viewModel.events.observe(this, androidx.lifecycle.Observer {
             println("GithubEvents $it")
             adapter.loadData(it)
+            switch.showContentView()
         })
         viewModel.start()
+
+
     }
 
-    override fun setupView() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_git_event)
-        binding.lifecycleOwner = this
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        title = "Git Event"
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
-    }
 }
 

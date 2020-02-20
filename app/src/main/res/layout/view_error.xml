@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/errorView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".view.GitEventActivity">
-        <include layout="@layout/view_empty"/>
-        <include layout="@layout/view_progress"/>
-        <include layout="@layout/view_error"/>
+        tools:context=".view.SplashActivity">
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvEvent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_fileName="error.json"
+            app:lottie_loop="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

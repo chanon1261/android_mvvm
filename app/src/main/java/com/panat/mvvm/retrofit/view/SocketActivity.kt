@@ -21,7 +21,6 @@ class SocketActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         binding.send.setOnClickListener {
             if (binding.message.text.toString().isNotEmpty()) {
 
@@ -76,7 +75,6 @@ class SocketActivity : BaseActivity() {
         super.setupView()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_socket)
         binding.lifecycleOwner = this
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         title = "Socket"
         openSocket()
         initSocket()
@@ -104,11 +102,6 @@ class SocketActivity : BaseActivity() {
 
     private var onConnectError = Emitter.Listener { args ->
         Log.e("onConnectError", "Exception " + args[0])
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return super.onSupportNavigateUp()
     }
 
     override fun onDestroy() {

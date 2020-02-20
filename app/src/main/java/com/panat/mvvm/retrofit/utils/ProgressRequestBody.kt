@@ -1,4 +1,4 @@
-package com.panat.mvvm.retrofit.utils;
+package com.panat.mvvm.retrofit.utils
 
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
@@ -33,9 +33,9 @@ class ProgressRequestBody : RequestBody {
     }
 
 
-    var numWriteToCalls = 0
+    private var numWriteToCalls = 0
 
-    protected val getProgressSubject: PublishSubject<Float> = PublishSubject.create<Float>()
+    private val getProgressSubject: PublishSubject<Float> = PublishSubject.create()
 
     fun getProgressSubject(): Observable<Float> {
         return getProgressSubject
@@ -60,7 +60,7 @@ class ProgressRequestBody : RequestBody {
         val `in` = FileInputStream(mFile)
         var uploaded: Long = 0
 
-        try {
+        `in`.use { `in` ->
             var read: Int
             var lastProgressPercentUpdate = 0.0f
             read = `in`.read(buffer)
@@ -82,8 +82,6 @@ class ProgressRequestBody : RequestBody {
                     }
                 }
             }
-        } finally {
-            `in`.close()
         }
     }
 

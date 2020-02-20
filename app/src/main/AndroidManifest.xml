@@ -17,7 +17,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".view.FirebaseCloudMessagingActivity"></activity>
+        <activity android:name=".view.ReadWriteFolderActivity"></activity>
+        <activity
+            android:name=".view.SplashActivity"
+            android:theme="@style/NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.FirebaseCloudMessagingActivity" />
         <activity android:name=".view.UploadActivity" />
         <activity android:name=".view.MainActivity">
             <intent-filter>
@@ -37,6 +47,9 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <service
+            android:name=".service.BadgeIntentService"
+            android:exported="false" />
 
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"

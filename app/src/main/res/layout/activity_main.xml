@@ -14,50 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/btn_git"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="@{()-> viewmodel.goGitEvent()}"
-            android:text="@string/git_event"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvMenu"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.26999998" />
-
-        <Button
-            android:id="@+id/btn_socket"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:onClick="@{()-> viewmodel.goSocket()}"
-            android:text="@string/socket"
-            app:layout_constraintEnd_toEndOf="@+id/btn_git"
-            app:layout_constraintStart_toStartOf="@+id/btn_git"
-            app:layout_constraintTop_toBottomOf="@+id/btn_git" />
-
-        <Button
-            android:id="@+id/btn_upload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:onClick="@{()-> viewmodel.goUpload()}"
-            android:text="@string/upload"
-            app:layout_constraintEnd_toEndOf="@+id/btn_socket"
-            app:layout_constraintStart_toStartOf="@+id/btn_socket"
-            app:layout_constraintTop_toBottomOf="@+id/btn_socket" />
-
-        <Button
-            android:id="@+id/FCM"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/fcm_message"
-            android:onClick="@{()-> viewmodel.goFCM()}"
-            app:layout_constraintEnd_toEndOf="@+id/btn_upload"
-            app:layout_constraintStart_toStartOf="@+id/btn_upload"
-            app:layout_constraintTop_toBottomOf="@+id/btn_upload" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
