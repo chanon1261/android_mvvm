@@ -72,7 +72,6 @@ class ReadWriteFolderActivity : BaseActivity() {
             if (it.isDirectory) {
                 println(tag + "directory " + it.name.toString())
             }
-
         }
     }
 
