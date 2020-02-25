@@ -29,7 +29,6 @@ task clean(type: Delete) {
 }
 
 ext{
-    anko_version='0.10.8'
     junitVersion = '4.12'
     mockitoVersion = '2.8.9'
     dexMakerVersion = '2.12.1'

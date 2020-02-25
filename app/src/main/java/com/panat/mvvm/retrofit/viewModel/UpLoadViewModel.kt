@@ -11,7 +11,6 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,11 +45,11 @@ class UpLoadViewModel(val retrofit: UploadService, val context: Context) : ViewM
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                context.toast("upload ${t.message}")
+//                context.toast("upload ${t.message}")
             }
 
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                context.toast("upload success")
+//                context.toast("upload success")
                 _success.postValue(response.body())
             }
         })

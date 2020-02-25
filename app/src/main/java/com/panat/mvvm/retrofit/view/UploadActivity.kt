@@ -29,7 +29,6 @@ import com.panat.mvvm.retrofit.viewModel.UpLoadViewModel
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
-import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
 
 
@@ -122,7 +121,7 @@ class UploadActivity : BaseActivity() {
                     permissions: MutableList<PermissionRequest>?,
                     token: PermissionToken?
                 ) {
-                    toast("permission denied")
+//                    toast("permission denied")
                     token?.continuePermissionRequest()
                 }
 
