@@ -92,6 +92,12 @@ dependencies {
     //download manager
     implementation 'com.mindorks.android:prdownloader:0.5.0'
 
+    //Logging
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+
+    //datetime
+    implementation 'com.jakewharton.threetenabp:threetenabp:1.2.2'
+
 
     // Testing dependencies
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'

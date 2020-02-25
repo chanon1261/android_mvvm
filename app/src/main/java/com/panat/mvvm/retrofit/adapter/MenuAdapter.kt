@@ -49,5 +49,4 @@ class MenuAdapter(private val context: Context, private val listener: OnClickIte
         this.items = data
         notifyDataSetChanged()
     }
-
 }

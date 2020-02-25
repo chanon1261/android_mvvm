@@ -4,8 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.panat.mvvm.retrofit.databinding.ItemEventsBinding
+import com.panat.mvvm.retrofit.extension.loadUrl
 import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
 
 class GitEventsAdapter(private val context: Context) :
@@ -35,12 +35,10 @@ class GitEventsAdapter(private val context: Context) :
     class EventsAdapterViewHolder(private val binding: ItemEventsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        private val context: Context = binding.root.context
-
         fun bind(item: GithubEvents) {
             binding.name.text = item.actor.display_login
             binding.event.text = item.type
-            Glide.with(context).load(item.actor.avatar_url).into(binding.profileImg)
+            binding.profileImg.loadUrl(item.actor.avatar_url)
         }
     }
 
@@ -49,7 +47,4 @@ class GitEventsAdapter(private val context: Context) :
         notifyDataSetChanged()
     }
 
-    fun add(data: List<GithubEvents>) {
-        this.items.addAll(data)
-    }
 }

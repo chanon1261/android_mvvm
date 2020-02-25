@@ -8,11 +8,11 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.databinding.ActivityReadWriteFolderBinding
 import com.snatik.storage.Storage
 import org.jetbrains.anko.toast
 import java.io.File
+
 
 class ReadWriteFolderActivity : BaseActivity() {
 
@@ -23,7 +23,10 @@ class ReadWriteFolderActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_read_write_folder)
+        binding = DataBindingUtil.setContentView(
+            this,
+            com.panat.mvvm.retrofit.R.layout.activity_read_write_folder
+        )
         Dexter.withActivity(this).withPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse?) {
@@ -48,7 +51,10 @@ class ReadWriteFolderActivity : BaseActivity() {
     private fun gotoReadWrite() {
         initStorage()
         printDirect()
-        storage.createDirectory(path)
+
+        println(tag + storage.externalStorageDirectory)
+
+        //storage.createDirectory(path)
         binding.create.setOnClickListener { v ->
             if (binding.folderName.text.toString().isNotEmpty()) {
                 //storage.createDirectory(path + binding.folderName.text.toString())

@@ -1,58 +1,35 @@
 package com.panat.mvvm.retrofit.viewModel
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.RingtoneManager
+import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
+import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.view.*
 
 class MainViewModel(private val context: Context) : ViewModel() {
 
-    private fun goGitEvent() {
-        val intent = Intent(context, GitEventActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
-    }
-
-    private fun goSocket() {
-        val intent = Intent(context, SocketActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
-    }
-
-    private fun goUpload() {
-        val intent = Intent(context, UploadActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
-    }
-
-    private fun goFCM() {
-        val intent = Intent(context, FirebaseCloudMessagingActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
-    }
-
-    private fun goRWFolder() {
-        val intent = Intent(context, ReadWriteFolderActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(intent)
-    }
-
     fun go(position: Int) {
         when (position) {
             0 -> {
-                goGitEvent()
+                goTo(GitEventActivity::class.java)
             }
             1 -> {
-                goSocket()
+                goTo(SocketActivity::class.java)
             }
             2 -> {
-                goUpload()
+                goTo(UploadActivity::class.java)
             }
             3 -> {
-                goFCM()
+                goTo(FirebaseCloudMessagingActivity::class.java)
             }
             4 -> {
-                goRWFolder()
+                goTo(ReadWriteFolderActivity::class.java)
             }
             else -> {
 
@@ -60,4 +37,48 @@ class MainViewModel(private val context: Context) : ViewModel() {
         }
     }
 
+    private fun goTo(cls: Class<*>?) {
+        val intent = Intent(context, cls)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(intent)
+    }
+
+    fun sendNotification(count: Int) {
+        val channelId = context.getString(R.string.default_notification_channel_id)
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
+        val intent = Intent(context, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(
+            context, 0 /* Request code */, intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+
+        val notification = NotificationCompat.Builder(context, "$channelId$count")
+            .setSmallIcon(R.drawable.ic_favorite_black_24dp)
+            .setContentTitle(context.getString(R.string.fcm_message))
+            .setContentText("test$count")
+            .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
+            .setNumber(count)
+            .setAutoCancel(true)
+            .setSound(defaultSoundUri)
+            .setContentIntent(pendingIntent)
+            .build()
+
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                "$channelId$count",
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            channel.setShowBadge(true)
+            notificationManager.createNotificationChannel(channel)
+        }
+        notificationManager.notify(0/* ID of notification */, notification)
+    }
 }

@@ -3,9 +3,11 @@ package com.panat.mvvm.retrofit.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.panat.mvvm.retrofit.di.provideGithubService
 import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
-import com.panat.mvvm.retrofit.repository.GitRepository
-import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class GitEventViewModel : ViewModel() {
@@ -14,21 +16,17 @@ class GitEventViewModel : ViewModel() {
     val events: LiveData<List<GithubEvents>>
         get() = _events
 
-    private val gitRepository = GitRepository()
-
     fun start() {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = async { gitRepository.getEvent() }
-                withContext(Dispatchers.Main) {
-                    if (response.await().isSuccessful) {
-                        _events.postValue(response.await().body())
-                    }
-                }
-                //println("GithubEvents ${response.await().body()}")
-            } catch (e: Exception) {
-                println("GithubEvents CoroutineScope Exception ${e.message}")
+        provideGithubService().getEvents().enqueue(object : Callback<List<GithubEvents>> {
+            override fun onFailure(call: Call<List<GithubEvents>>, t: Throwable) {
             }
-        }
+            override fun onResponse(
+                call: Call<List<GithubEvents>>,
+                response: Response<List<GithubEvents>>
+            ) {
+                _events.postValue(response.body())
+            }
+
+        })
     }
 }
