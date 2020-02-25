@@ -11,7 +11,6 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.view.*
-import me.leolin.shortcutbadger.ShortcutBadger
 
 class MainViewModel(private val context: Context) : ViewModel() {
 
@@ -58,10 +57,9 @@ class MainViewModel(private val context: Context) : ViewModel() {
 
         val notification = NotificationCompat.Builder(context, "$channelId$count")
             .setSmallIcon(R.drawable.ic_favorite_black_24dp)
-            .setContentTitle(context.getString(R.string.fcm_message) + count)
+            .setContentTitle(context.getString(R.string.fcm_message))
             .setContentText("test$count")
             .setBadgeIconType(NotificationCompat.BADGE_ICON_LARGE)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setNumber(count)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
@@ -82,9 +80,5 @@ class MainViewModel(private val context: Context) : ViewModel() {
             notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(0/* ID of notification */, notification)
-
-        if (ShortcutBadger.isBadgeCounterSupported(context)) {
-            ShortcutBadger.applyNotification(context, notification, count)
-        }
     }
 }
