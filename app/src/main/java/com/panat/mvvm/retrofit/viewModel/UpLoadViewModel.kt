@@ -1,14 +1,11 @@
 package com.panat.mvvm.retrofit.viewModel
 
 import android.content.Context
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.androidnetworking.utils.Utils.getMimeType
 import com.panat.mvvm.retrofit.service.UploadService
-import com.panat.mvvm.retrofit.utils.FileHelper
 import com.panat.mvvm.retrofit.utils.ProgressRequestBody
 import io.reactivex.schedulers.Schedulers
 import okhttp3.MediaType
@@ -30,28 +27,8 @@ class UpLoadViewModel(val retrofit: UploadService, val context: Context) : ViewM
     val process: LiveData<Float>
         get() = _process
 
-    fun uploadPicture(uri: Uri) {
-        val fileHelper = FileHelper()
-        val realPath = fileHelper.getPathFromURI(context, uri)
 
-        println("real path: $realPath")
-        val file = fileHelper.createFile(realPath!!)
-
-        val mediaType: MediaType = MediaType.parse(getMimeType(realPath))!!
-
-        val fileProgress = ProgressRequestBody(file, mediaType)
-        val filePart = MultipartBody.Part.createFormData("file", file.name, fileProgress)
-
-        fileProgress.getProgressSubject()
-            .subscribeOn(Schedulers.io())
-            .subscribe { percentage ->
-                Log.i("PROGRESS", "$percentage%")
-                _process.postValue(percentage)
-            }
-        upload(filePart)
-    }
-
-    fun uploadVideo(path: String) {
+    fun upload(path: String) {
         val file = File(path)
         val mediaType: MediaType = MediaType.parse(getMimeType(path))!!
         val fileProgress = ProgressRequestBody(file, mediaType)
@@ -59,12 +36,9 @@ class UpLoadViewModel(val retrofit: UploadService, val context: Context) : ViewM
         fileProgress.getProgressSubject()
             .subscribeOn(Schedulers.io())
             .subscribe { percentage ->
-                Log.i("PROGRESS", "$percentage%")
                 _process.postValue(percentage)
             }
         upload(filePart)
-
-
     }
 
     private fun upload(filePart: MultipartBody.Part) {

@@ -38,8 +38,6 @@ class GitEventActivity : BaseActivity() {
             switch.showContentView()
         })
         viewModel.start()
-
-
     }
 
 }

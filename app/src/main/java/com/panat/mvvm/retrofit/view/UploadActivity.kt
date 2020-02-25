@@ -9,9 +9,7 @@ import android.database.Cursor
 import android.media.ThumbnailUtils
 import android.net.Uri
 import android.os.Bundle
-import android.os.CancellationSignal
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -23,14 +21,16 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.databinding.ActivityUploadBinding
 import com.panat.mvvm.retrofit.di.provideUpload
+import com.panat.mvvm.retrofit.extension.hide
+import com.panat.mvvm.retrofit.extension.show
 import com.panat.mvvm.retrofit.service.UploadService
+import com.panat.mvvm.retrofit.utils.FileHelper
 import com.panat.mvvm.retrofit.viewModel.UpLoadViewModel
 import com.zhihu.matisse.Matisse
 import com.zhihu.matisse.MimeType
 import com.zhihu.matisse.engine.impl.GlideEngine
 import org.jetbrains.anko.toast
 import org.koin.android.ext.android.inject
-import java.io.File
 
 
 class UploadActivity : BaseActivity() {
@@ -51,8 +51,8 @@ class UploadActivity : BaseActivity() {
         }
 
         viewModel.success.observe(this, Observer {
-            binding.determinateBar.visibility = View.INVISIBLE
-            binding.percent.visibility = View.INVISIBLE
+            binding.determinateBar.hide()
+            binding.percent.hide()
             binding.image.alpha = 1F
         })
 
@@ -78,11 +78,11 @@ class UploadActivity : BaseActivity() {
 
             path?.let {
                 if (it.contains("/video/")) {
-                    Log.d(this.javaClass.name, "Video")
+                    println("Upload Video")
                     beforeUploadVideo(uri)
                 }
                 if (it.contains("/images/")) {
-                    Log.d(this.javaClass.name, "Image")
+                    println("Upload Image")
                     beforeUploadImage(uri)
                 }
             }
@@ -91,27 +91,24 @@ class UploadActivity : BaseActivity() {
 
     private fun beforeUploadImage(data: Uri) {
         binding.image.setImageURI(data)
-        binding.determinateBar.visibility = View.VISIBLE
-        binding.percent.visibility = View.VISIBLE
-        viewModel.uploadPicture(data)
+        binding.determinateBar.show()
+        binding.percent.show()
+        val fileHelper = FileHelper()
+        val realPath = fileHelper.getPathFromURI(this, data)
+        realPath?.let {
+            viewModel.upload(it)
+        }
     }
 
     private fun beforeUploadVideo(uri: Uri) {
-
         val path = getRealPathFromURI(this, uri)
-        val file = File(path)
-
-
         binding.determinateBar.visibility = View.VISIBLE
         binding.percent.visibility = View.VISIBLE
-
-        val signal = CancellationSignal()
-//        signal.setOnCancelListener()
-
-        val b1Map = ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND)
+        val b1Map =
+            ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND)
         //val bMap = ThumbnailUtils.createVideoThumbnail(file, Size(120, 120), signal)
         binding.image.setImageBitmap(b1Map)
-        viewModel.uploadVideo(path)
+        viewModel.upload(path)
     }
 
     private fun checkPermission() {
@@ -154,14 +151,13 @@ class UploadActivity : BaseActivity() {
     private fun getRealPathFromURI(context: Context, contentUri: Uri): String {
         var cursor: Cursor? = null
         try {
-            val proj = arrayOf(MediaStore.Video.Media.DATA)
-            cursor = context.contentResolver.query(contentUri, proj, null, null, null)
-            val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            val proJ = arrayOf(MediaStore.Video.Media.DATA)
+            cursor = context.contentResolver.query(contentUri, proJ, null, null, null)
+            val columnIndex = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             cursor.moveToFirst()
-            return cursor.getString(column_index)
+            return cursor.getString(columnIndex)
         } finally {
             cursor?.close()
         }
     }
-
 }
