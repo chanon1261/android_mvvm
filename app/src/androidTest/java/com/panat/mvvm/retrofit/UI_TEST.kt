@@ -5,7 +5,6 @@ import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
@@ -30,5 +29,9 @@ class MainTest {
 
         onView(withId(R.id.rvMenu))
             .perform(actionOnItemAtPosition<MenuAdapter.MenuAdapterViewHolder>(0, click()))
+
+        onView(withId(R.id.progressView))
+            .check(matches(isDisplayed()))
+
     }
 }
