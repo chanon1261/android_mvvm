@@ -9,6 +9,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import com.panat.mvvm.retrofit.databinding.ActivityReadWriteFolderBinding
+import com.panat.mvvm.retrofit.extension.toastLong
 import com.snatik.storage.Storage
 import java.io.File
 
@@ -40,7 +41,7 @@ class ReadWriteFolderActivity : BaseActivity() {
                 }
 
                 override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-//                    toast("onPermissionDenied")
+                    toastLong("onPermissionDenied")
                 }
 
             })

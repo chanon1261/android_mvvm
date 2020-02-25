@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.androidnetworking.utils.Utils.getMimeType
+import com.panat.mvvm.retrofit.extension.toastLong
 import com.panat.mvvm.retrofit.service.UploadService
 import com.panat.mvvm.retrofit.utils.ProgressRequestBody
 import io.reactivex.schedulers.Schedulers
@@ -45,11 +46,11 @@ class UpLoadViewModel(val retrofit: UploadService, val context: Context) : ViewM
 
         call.enqueue(object : Callback<ResponseBody> {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                context.toast("upload ${t.message}")
+                context.toastLong("upload ${t.message}")
             }
 
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//                context.toast("upload success")
+                context.toastLong("upload success")
                 _success.postValue(response.body())
             }
         })

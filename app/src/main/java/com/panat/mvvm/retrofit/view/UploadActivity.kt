@@ -23,6 +23,7 @@ import com.panat.mvvm.retrofit.databinding.ActivityUploadBinding
 import com.panat.mvvm.retrofit.di.provideUpload
 import com.panat.mvvm.retrofit.extension.hide
 import com.panat.mvvm.retrofit.extension.show
+import com.panat.mvvm.retrofit.extension.toastLong
 import com.panat.mvvm.retrofit.service.UploadService
 import com.panat.mvvm.retrofit.utils.FileHelper
 import com.panat.mvvm.retrofit.viewModel.UpLoadViewModel
@@ -121,7 +122,7 @@ class UploadActivity : BaseActivity() {
                     permissions: MutableList<PermissionRequest>?,
                     token: PermissionToken?
                 ) {
-//                    toast("permission denied")
+                    toastLong("permission denied")
                     token?.continuePermissionRequest()
                 }
 
