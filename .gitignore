@@ -25,6 +25,8 @@ local.properties
 # Eclipse project files
 .classpath
 .project
+
+google-services.json
   
 # Android Studio
 .idea
