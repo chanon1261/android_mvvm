@@ -1,6 +1,6 @@
 package com.panat.mvvm.retrofit.model.GitEvent
 
-data class GithubEvents(
+data class GithEvents(
     val actor: Actor,
     val created_at: String,
     val id: String,

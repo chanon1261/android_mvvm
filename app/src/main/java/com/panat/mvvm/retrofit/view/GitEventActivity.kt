@@ -33,11 +33,14 @@ class GitEventActivity : BaseActivity() {
 
         switch.showProgressView()
         viewModel.events.observe(this, androidx.lifecycle.Observer {
-            println("GithubEvents $it")
-            adapter.loadData(it)
-            switch.showContentView()
+            it?.let {
+                println("GithubEvents $it")
+                adapter.loadData(it)
+                switch.showContentView()
+            }?: run {
+                switch.showErrorView()
+            }
         })
-        viewModel.start()
     }
 
 }

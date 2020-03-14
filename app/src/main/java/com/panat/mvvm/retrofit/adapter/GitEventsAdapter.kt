@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.panat.mvvm.retrofit.databinding.ItemEventsBinding
 import com.panat.mvvm.retrofit.extension.loadUrl
-import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
+import com.panat.mvvm.retrofit.model.GitEvent.GithEvents
 
 class GitEventsAdapter(private val context: Context) :
     RecyclerView.Adapter<GitEventsAdapter.EventsAdapterViewHolder>() {
 
-    private var items: MutableList<GithubEvents> = mutableListOf()
+    private var items: MutableList<GithEvents> = mutableListOf()
 
     override fun getItemCount(): Int {
         return items.size
@@ -35,15 +35,15 @@ class GitEventsAdapter(private val context: Context) :
     class EventsAdapterViewHolder(private val binding: ItemEventsBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: GithubEvents) {
+        fun bind(item: GithEvents) {
             binding.name.text = item.actor.display_login
             binding.event.text = item.type
             binding.profileImg.loadUrl(item.actor.avatar_url)
         }
     }
 
-    fun loadData(data: List<GithubEvents>) {
-        this.items = data as MutableList<GithubEvents>
+    fun loadData(data: List<GithEvents>) {
+        this.items = data as MutableList<GithEvents>
         notifyDataSetChanged()
     }
 

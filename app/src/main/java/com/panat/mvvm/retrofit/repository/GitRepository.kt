@@ -1,31 +1,24 @@
 package com.panat.mvvm.retrofit.repository
 
 import androidx.lifecycle.MutableLiveData
-import com.panat.mvvm.retrofit.di.provideGithubService
-import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
+import com.panat.mvvm.retrofit.model.GitEvent.GithEvents
+import com.panat.mvvm.retrofit.service.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class GitRepository {
-    private var client = provideGithubService()
-    suspend fun getEvent() = client.getEventsCoroutines()
-
-    fun get(): MutableLiveData<List<GithubEvents>> {
-        val newsData = MutableLiveData<List<GithubEvents>>()
-        client.getEvents().enqueue(object : Callback<List<GithubEvents>> {
-            override fun onFailure(call: Call<List<GithubEvents>>, t: Throwable) {
+class GitRepository(val retrofit: ApiService) {
+    fun get(): MutableLiveData<List<GithEvents>> {
+        val data = MutableLiveData<List<GithEvents>>()
+        retrofit.getEvents().enqueue(object : Callback<List<GithEvents>> {
+            override fun onFailure(call: Call<List<GithEvents>>, t: Throwable) {
+                data.postValue(null)
             }
-
-            override fun onResponse(
-                call: Call<List<GithubEvents>>,
-                response: Response<List<GithubEvents>>
-            ) {
-                newsData.postValue(response.body())
+            override fun onResponse(call: Call<List<GithEvents>>, response: Response<List<GithEvents>>) {
+                data.postValue(response.body())
             }
-
         })
-        return newsData
+        return data
     }
 }

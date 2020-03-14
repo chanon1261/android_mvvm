@@ -4,29 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.panat.mvvm.retrofit.di.provideGithubService
-import com.panat.mvvm.retrofit.model.GitEvent.GithubEvents
+import com.panat.mvvm.retrofit.model.GitEvent.GithEvents
+import com.panat.mvvm.retrofit.repository.GitRepository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class GitEventViewModel : ViewModel() {
-
-    private val _events = MutableLiveData<List<GithubEvents>>()
-    val events: LiveData<List<GithubEvents>>
-        get() = _events
-
-    fun start() {
-        provideGithubService().getEvents().enqueue(object : Callback<List<GithubEvents>> {
-            override fun onFailure(call: Call<List<GithubEvents>>, t: Throwable) {
-            }
-            override fun onResponse(
-                call: Call<List<GithubEvents>>,
-                response: Response<List<GithubEvents>>
-            ) {
-                _events.postValue(response.body())
-            }
-
-        })
-    }
+class GitEventViewModel(private val repository: GitRepository) : ViewModel() {
+    val events: LiveData<List<GithEvents>>
+        get() = repository.get()
 }
