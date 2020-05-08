@@ -3,7 +3,6 @@ package com.panat.mvvm.retrofit.view
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.adapter.MenuAdapter
@@ -20,15 +19,15 @@ class MainActivity : BaseActivity() {
     private var count = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         binding.lifecycleOwner = this
         binding.viewmodel = viewModel
 
-        val adapter = MenuAdapter(this, object : MenuAdapter.OnClickItem {
-            override fun onclick(position: Int) {
-                viewModel.go(position)
-            }
-        })
+        val adapter = MenuAdapter(this) { position ->
+            viewModel.go(position)
+        }
+
         binding.rvMenu.layoutManager = LinearLayoutManager(this)
         binding.rvMenu.adapter = adapter
         adapter.loadData(Constants.menu)

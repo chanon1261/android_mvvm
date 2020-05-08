@@ -1,7 +1,6 @@
 package com.panat.mvvm.retrofit.view
 
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -23,10 +22,8 @@ class ReadWriteFolderActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(
-            this,
-            com.panat.mvvm.retrofit.R.layout.activity_read_write_folder
-        )
+        binding = ActivityReadWriteFolderBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         Dexter.withActivity(this).withPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
             .withListener(object : PermissionListener {
                 override fun onPermissionGranted(response: PermissionGrantedResponse?) {

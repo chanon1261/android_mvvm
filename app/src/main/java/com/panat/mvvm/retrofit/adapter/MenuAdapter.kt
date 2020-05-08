@@ -6,14 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.panat.mvvm.retrofit.databinding.ItemMenuBinding
 
-class MenuAdapter(private val context: Context, private val listener: OnClickItem) :
+class MenuAdapter(private val context: Context, private val position: (Int) -> Unit) :
     RecyclerView.Adapter<MenuAdapter.MenuAdapterViewHolder>() {
 
     private var items: List<String> = mutableListOf()
-
-    interface OnClickItem {
-        fun onclick(position: Int)
-    }
 
     override fun getItemCount(): Int {
         return items.size
@@ -40,7 +36,7 @@ class MenuAdapter(private val context: Context, private val listener: OnClickIte
         fun bind(item: String) {
             binding.menuName.text = item
             itemView.setOnClickListener {
-                listener.onclick(adapterPosition)
+               position(adapterPosition)
             }
         }
     }
