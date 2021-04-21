@@ -1,49 +1,46 @@
 package com.panat.mvvm.retrofit.view
 
-import android.os.Bundle
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import com.panat.mvvm.retrofit.base.BaseActivity
 import com.panat.mvvm.retrofit.databinding.ActivityReadWriteFolderBinding
 import com.panat.mvvm.retrofit.extension.toastLong
 import com.snatik.storage.Storage
 import java.io.File
 
 
-class ReadWriteFolderActivity : BaseActivity() {
+class ReadWriteFolderActivity : BaseActivity<ActivityReadWriteFolderBinding>() {
 
     private lateinit var storage: Storage
     private var internalPath = ""
-    private lateinit var binding: ActivityReadWriteFolderBinding
+
     val path = internalPath + File.separator + "rwActivity" + File.separator
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityReadWriteFolderBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun initView() {
+        bindView(ActivityReadWriteFolderBinding.inflate(layoutInflater))
         Dexter.withActivity(this).withPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            .withListener(object : PermissionListener {
-                override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                    gotoReadWrite()
-                }
+                .withListener(object : PermissionListener {
+                    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+                        gotoReadWrite()
+                    }
 
-                override fun onPermissionRationaleShouldBeShown(
-                    permission: PermissionRequest?,
-                    token: PermissionToken?
-                ) {
-                    token?.continuePermissionRequest()
-                }
+                    override fun onPermissionRationaleShouldBeShown(
+                            permission: PermissionRequest?,
+                            token: PermissionToken?
+                    ) {
+                        token?.continuePermissionRequest()
+                    }
 
-                override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-                    toastLong("onPermissionDenied")
-                }
+                    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+                        toastLong("onPermissionDenied")
+                    }
 
-            })
-
+                })
     }
+
 
     private fun gotoReadWrite() {
         initStorage()

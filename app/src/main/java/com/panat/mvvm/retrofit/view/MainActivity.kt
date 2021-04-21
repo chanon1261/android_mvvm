@@ -1,29 +1,28 @@
 package com.panat.mvvm.retrofit.view
 
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.panat.mvvm.retrofit.R
 import com.panat.mvvm.retrofit.adapter.MenuAdapter
+import com.panat.mvvm.retrofit.base.BaseActivity
 import com.panat.mvvm.retrofit.databinding.ActivityMainBinding
 import com.panat.mvvm.retrofit.utils.Constants
 import com.panat.mvvm.retrofit.viewModel.MainViewModel
 import org.koin.android.ext.android.inject
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private val viewModel: MainViewModel by inject()
-    private lateinit var binding: ActivityMainBinding
     private var count = 0
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        binding.lifecycleOwner = this
-        binding.viewmodel = viewModel
 
+    override fun initView() {
+        bindView(ActivityMainBinding.inflate(layoutInflater))
+        initRecyclerview()
+    }
+
+    private fun initRecyclerview() {
         val adapter = MenuAdapter(this) { position ->
             viewModel.go(position)
         }
@@ -48,6 +47,4 @@ class MainActivity : BaseActivity() {
         inflater.inflate(R.menu.menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
-
 }

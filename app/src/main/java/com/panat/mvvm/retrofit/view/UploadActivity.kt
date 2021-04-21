@@ -1,24 +1,21 @@
 package com.panat.mvvm.retrofit.view
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.database.Cursor
 import android.media.ThumbnailUtils
 import android.net.Uri
-import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
-import com.panat.mvvm.retrofit.R
+import com.panat.mvvm.retrofit.base.BaseActivity
 import com.panat.mvvm.retrofit.databinding.ActivityUploadBinding
 import com.panat.mvvm.retrofit.di.provideUpload
 import com.panat.mvvm.retrofit.extension.hide
@@ -33,18 +30,16 @@ import com.zhihu.matisse.engine.impl.GlideEngine
 import org.koin.android.ext.android.inject
 
 
-class UploadActivity : BaseActivity() {
+class UploadActivity : BaseActivity<ActivityUploadBinding>() {
 
-    private lateinit var binding: ActivityUploadBinding
+
     val viewModel: UpLoadViewModel by inject()
     private lateinit var retrofit: UploadService
     private val GALLERY_REQUEST_CODE = 101
 
-    @SuppressLint("SetTextI18n")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initView() {
+        bindView(ActivityUploadBinding.inflate(layoutInflater))
         retrofit = provideUpload()
-        setupView()
 
         binding.btnUploadImg.setOnClickListener {
             checkPermission()
@@ -58,14 +53,9 @@ class UploadActivity : BaseActivity() {
 
         viewModel.process.observe(this, Observer {
             binding.determinateBar.progress = it.toInt()
-            binding.percent.text = "$it%"
+            val percent = "$it%"
+            binding.percent.text = percent
         })
-    }
-
-    override fun setupView() {
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_upload)
-        title = "Upload"
-        binding.lifecycleOwner = this
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -105,7 +95,7 @@ class UploadActivity : BaseActivity() {
         binding.determinateBar.visibility = View.VISIBLE
         binding.percent.visibility = View.VISIBLE
         val b1Map =
-            ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND)
+                ThumbnailUtils.createVideoThumbnail(path, MediaStore.Images.Thumbnails.FULL_SCREEN_KIND)
         //val bMap = ThumbnailUtils.createVideoThumbnail(file, Size(120, 120), signal)
         binding.image.setImageBitmap(b1Map)
         viewModel.upload(path)
@@ -113,39 +103,39 @@ class UploadActivity : BaseActivity() {
 
     private fun checkPermission() {
         Dexter.withActivity(this)
-            .withPermissions(
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            )
-            .withListener(object : MultiplePermissionsListener {
-                override fun onPermissionRationaleShouldBeShown(
-                    permissions: MutableList<PermissionRequest>?,
-                    token: PermissionToken?
-                ) {
-                    toastLong("permission denied")
-                    token?.continuePermissionRequest()
-                }
-
-                override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
-                    if (report?.areAllPermissionsGranted()!!) {
-                        pickFromGallery()
+                .withPermissions(
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
+                .withListener(object : MultiplePermissionsListener {
+                    override fun onPermissionRationaleShouldBeShown(
+                            permissions: MutableList<PermissionRequest>?,
+                            token: PermissionToken?
+                    ) {
+                        toastLong("permission denied")
+                        token?.continuePermissionRequest()
                     }
-                }
-            })
-            .check()
+
+                    override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                        if (report?.areAllPermissionsGranted()!!) {
+                            pickFromGallery()
+                        }
+                    }
+                })
+                .check()
     }
 
     private fun pickFromGallery() {
         Matisse.from(this)
-            .choose(MimeType.ofAll())
-            .showSingleMediaType(true)
-            .countable(true)
-            .maxSelectable(1)
-            .gridExpectedSize(400)
-            .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
-            .thumbnailScale(0.45f)
-            .imageEngine(GlideEngine())
-            .forResult(GALLERY_REQUEST_CODE)
+                .choose(MimeType.ofAll())
+                .showSingleMediaType(true)
+                .countable(true)
+                .maxSelectable(1)
+                .gridExpectedSize(400)
+                .restrictOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+                .thumbnailScale(0.45f)
+                .imageEngine(GlideEngine())
+                .forResult(GALLERY_REQUEST_CODE)
     }
 
     private fun getRealPathFromURI(context: Context, contentUri: Uri): String {

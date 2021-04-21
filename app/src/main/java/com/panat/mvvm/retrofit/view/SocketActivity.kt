@@ -1,10 +1,8 @@
 package com.panat.mvvm.retrofit.view
 
-import android.os.Bundle
 import android.util.Log
-import androidx.databinding.DataBindingUtil
 import com.panat.mvvm.retrofit.MainApp
-import com.panat.mvvm.retrofit.R
+import com.panat.mvvm.retrofit.base.BaseActivity
 import com.panat.mvvm.retrofit.databinding.ActivitySocketBinding
 import com.panat.mvvm.retrofit.utils.AckWithTimeOut
 import io.socket.client.IO
@@ -14,12 +12,15 @@ import org.json.JSONException
 import org.json.JSONObject
 
 
-class SocketActivity : BaseActivity() {
+class SocketActivity : BaseActivity<ActivitySocketBinding>() {
 
     private lateinit var socket: Socket
-    private lateinit var binding: ActivitySocketBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun initView() {
+        bindView(ActivitySocketBinding.inflate(layoutInflater))
+
+        openSocket()
+        initSocket()
 
         binding.send.setOnClickListener {
             if (binding.message.text.toString().isNotEmpty()) {
@@ -71,14 +72,6 @@ class SocketActivity : BaseActivity() {
         }
     }
 
-    override fun setupView() {
-        super.setupView()
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_socket)
-        binding.lifecycleOwner = this
-        title = "Socket"
-        openSocket()
-        initSocket()
-    }
 
     private fun openSocket() {
         try {
